@@ -47,6 +47,16 @@ function stopTimer() {
     interval = null;
 }
 
+function resetTimer() {
+    setTime();
+    startEl.innerHTML = "Start";
+    clearInterval(interval);
+    interval = null;
+
+    updateTimerDisplay();
+    isInitial = true;
+}
+
 function updateCountdown() {
     updateTimerDisplay();
     time--;
@@ -73,4 +83,10 @@ startEl.addEventListener('click', async() => {
         chrome.runtime.sendMessage({cmd: 'START_TIMER', when: timeNow});
         startTimer();
     }
+})
+
+resetEl.addEventListener('click', async() => {
+    chrome.runtime.sendMessage({cmd: 'RESET_TIMER'});
+    resetTimer();
+
 })
