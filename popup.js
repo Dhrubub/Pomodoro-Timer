@@ -38,13 +38,6 @@ function startTimer() {
     interval = setInterval(updateCountdown, 1000);
 
     isInitial = false;
-
-
-    // if (time.getTime() > Date.now()) {
-    //     setInterval(() => {
-    //         updateTimerDisplay(time);
-    //     }, 1000)
-    // }
 }
 
 function stopTimer() {
@@ -72,6 +65,16 @@ function updateTimerDisplay() {
     let minutes = Math.floor(time / 60);
     let seconds = time % 60;
 
+    if (minutes == 0 && seconds == 0) {
+        resetTimer();
+        chrome.notifications.create({
+            title: "Pomodoro",
+            iconUrl: "tomato.png",
+            message: "Timer is done",
+            type: "basic",
+        });
+    }
+
     minutes = minutes < 10 ? "0" + minutes : minutes;
     seconds = seconds < 10 ? "0" + seconds : seconds;
 
@@ -98,6 +101,7 @@ function changeMode(newMode) {
 
 
     changeColor(newMode);
+    chrome.runtime.sendMessage({cmd: 'CHANGE_MODE', mode: newMode});
 }
 
 startEl.addEventListener('click', async() => {
@@ -108,7 +112,7 @@ startEl.addEventListener('click', async() => {
         stopTimer();
     }
     else {
-        chrome.runtime.sendMessage({cmd: 'START_TIMER', when: timeNow});
+        chrome.runtime.sendMessage({cmd: 'START_TIMER', when: timeNow, mode: mode});
         startTimer();
     }
 })
@@ -125,7 +129,6 @@ pomodoroEl.addEventListener('click', async() => {
         dark: "#d95550",
         light: "#dd6662",
     }
-    chrome.runtime.sendMessage({cmd: 'CHANGE_MODE', mode: mode});
     changeMode(mode)
 
 })
@@ -136,7 +139,6 @@ shortBreakEl.addEventListener('click', async() => {
         dark: "#4c9195",
         light: "#5e9ca0",
     }
-    chrome.runtime.sendMessage({cmd: 'CHANGE_MODE', mode: mode});
     changeMode(mode)
 
 })
@@ -147,7 +149,6 @@ longBreakEl.addEventListener('click', async() => {
         dark: "#457ca3",
         light: "#5889ac",
     }
-    chrome.runtime.sendMessage({cmd: 'CHANGE_MODE', mode: mode});
     changeMode(mode)
 
 })
