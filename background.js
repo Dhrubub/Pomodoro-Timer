@@ -11,7 +11,6 @@ let isRunning = false;
 
 let timerTime;
 let timerFinish;
-
 let passedTime = 0;
 
 function resetTimer() {
@@ -28,7 +27,6 @@ function updateTime() {
 
     passedTime = Math.floor(passedTime / 1000);
     time = prevTime - passedTime;
-
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -36,7 +34,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         mode = request.mode;
         timerTime = new Date(request.when);
         isRunning = true;
-        console.log(prevTime);
+
         timerFinish = setTimeout(() => {
             resetTimer();
             chrome.notifications.create({
@@ -62,9 +60,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         updateTime();
 
         sendResponse({time: time, run: isRunning, mode: mode})
-    }
-
-    else if (request.cmd === 'CHANGE_MODE') {
+    } else if (request.cmd === 'CHANGE_MODE') {
         mode = request.mode;
         resetTimer();
     }

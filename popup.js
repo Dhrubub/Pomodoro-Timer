@@ -15,7 +15,6 @@ let interval = null;
 let isInitial = true;
 
 
-
 chrome.runtime.sendMessage({cmd: 'GET_TIME'}, (response) => {
     if (response.time) {
         time = response.time;
@@ -24,7 +23,6 @@ chrome.runtime.sendMessage({cmd: 'GET_TIME'}, (response) => {
         if (response.run) {
             startTimer();
         }
-        console.log(time);
     }
 })
 
@@ -99,7 +97,6 @@ function changeMode(newMode) {
     setTime();
     resetTimer();
 
-
     changeColor(newMode);
     chrome.runtime.sendMessage({cmd: 'CHANGE_MODE', mode: newMode});
 }
@@ -120,7 +117,6 @@ startEl.addEventListener('click', async() => {
 resetEl.addEventListener('click', async() => {
     chrome.runtime.sendMessage({cmd: 'RESET_TIMER'});
     resetTimer();
-
 })
 
 pomodoroEl.addEventListener('click', async() => {
@@ -130,7 +126,6 @@ pomodoroEl.addEventListener('click', async() => {
         light: "#dd6662",
     }
     changeMode(mode)
-
 })
 
 shortBreakEl.addEventListener('click', async() => {
@@ -140,7 +135,6 @@ shortBreakEl.addEventListener('click', async() => {
         light: "#5e9ca0",
     }
     changeMode(mode)
-
 })
 
 longBreakEl.addEventListener('click', async() => {
@@ -150,5 +144,4 @@ longBreakEl.addEventListener('click', async() => {
         light: "#5889ac",
     }
     changeMode(mode)
-
 })
