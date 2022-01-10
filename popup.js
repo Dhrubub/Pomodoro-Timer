@@ -12,10 +12,14 @@ let isInitial = true;
 
 
 chrome.runtime.sendMessage({cmd: 'GET_TIME'}, (response) => {
-    // if (response.time) {
-    //     const time = new Date(response.time);
-    //     startTimer(time);
-    // }
+    if (response.time) {
+        time = time - response.time;
+        if (response.run) {
+            updateTimerDisplay();
+            startTimer();
+        }
+        console.log(time);
+    }
 })
 
 function setTime() {
