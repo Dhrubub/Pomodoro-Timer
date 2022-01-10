@@ -5,16 +5,22 @@ const pomodoroEl = document.getElementById('pomodoroButton');
 const shortBreakEl = document.getElementById('shortBreakButton');
 const longBreakEl = document.getElementById('longBreakButton');
 
-let startingTime = 25;
-let time = startingTime * 60;
+let mode = {
+    time: 25,
+    dark: "#d95550",
+    light: "#dd6662",
+}
+let time = mode.time * 60;
 let interval = null;
 let isInitial = true;
+
 
 
 chrome.runtime.sendMessage({cmd: 'GET_TIME'}, (response) => {
     if (response.time) {
         time = response.time;
         updateTimerDisplay();
+        changeColor(response.mode);
         if (response.run) {
             startTimer();
         }
@@ -23,7 +29,7 @@ chrome.runtime.sendMessage({cmd: 'GET_TIME'}, (response) => {
 })
 
 function setTime() {
-    time = startingTime * 60;
+    time = mode.time * 60;
 }
 
 function startTimer() {
@@ -72,6 +78,28 @@ function updateTimerDisplay() {
     countdownEl.innerHTML = `${minutes} : ${seconds}`;
 }
 
+function changeColor(mode) {
+    document.getElementsByTagName("body")[0].style.backgroundColor = mode.dark;
+
+    let buttons = [
+        ...document.getElementsByTagName("button"),
+        ...document.getElementsByTagName("span")
+    ];
+
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].style.backgroundColor = mode.light;
+    }
+}
+
+function changeMode(newMode) {
+    mode = newMode;
+    setTime();
+    resetTimer();
+
+
+    changeColor(newMode);
+}
+
 startEl.addEventListener('click', async() => {
     const timeNow = new Date(Date.now());
 
@@ -88,5 +116,38 @@ startEl.addEventListener('click', async() => {
 resetEl.addEventListener('click', async() => {
     chrome.runtime.sendMessage({cmd: 'RESET_TIMER'});
     resetTimer();
+
+})
+
+pomodoroEl.addEventListener('click', async() => {
+    const mode = {
+        time: 25,
+        dark: "#d95550",
+        light: "#dd6662",
+    }
+    chrome.runtime.sendMessage({cmd: 'CHANGE_MODE', mode: mode});
+    changeMode(mode)
+
+})
+
+shortBreakEl.addEventListener('click', async() => {
+    const mode = {
+        time: 5,
+        dark: "#4c9195",
+        light: "#5e9ca0",
+    }
+    chrome.runtime.sendMessage({cmd: 'CHANGE_MODE', mode: mode});
+    changeMode(mode)
+
+})
+
+longBreakEl.addEventListener('click', async() => {
+    const mode = {
+        time: 15,
+        dark: "#457ca3",
+        light: "#5889ac",
+    }
+    chrome.runtime.sendMessage({cmd: 'CHANGE_MODE', mode: mode});
+    changeMode(mode)
 
 })

@@ -1,5 +1,10 @@
-let startingTime = 25;
-let time = startingTime * 60;
+let mode = {
+    time: 25,
+    dark: "#d95550",
+    light: "#dd6662",
+}
+
+let time = mode.time * 60;
 let prevTime = time;
 
 let isRunning = false;
@@ -9,11 +14,12 @@ let timerTime;
 let passedTime = 0;
 
 function resetTimer() {
-    time = startingTime * 60;
+    time = mode.time * 60;
     prevTime = time;
     isRunning = false;
     passedTime = 0;
 }
+
 
 function updateTime() {
     if (timerTime && isRunning) {
@@ -45,8 +51,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     } else if (request.cmd === 'GET_TIME') {
         updateTime();
 
-        sendResponse({time: time, run: isRunning})
+        sendResponse({time: time, run: isRunning, mode: mode})
     }
+
+    else if (request.cmd === 'CHANGE_MODE') {
+        mode = request.mode;
+        resetTimer();
+    }
+
 })
 
 setInterval(()=>{console.log("")}, 1000);
