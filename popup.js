@@ -15,7 +15,7 @@ let interval = null;
 let isInitial = true;
 
 
-chrome.runtime.sendMessage({cmd: 'GET_TIME'}, (response) => {
+chrome.runtime.sendMessage({ cmd: 'GET_TIME' }, (response) => {
     if (response.time) {
         time = response.time;
         updateTimerDisplay();
@@ -98,28 +98,28 @@ function changeMode(newMode) {
     resetTimer();
 
     changeColor(newMode);
-    chrome.runtime.sendMessage({cmd: 'CHANGE_MODE', mode: newMode});
+    chrome.runtime.sendMessage({ cmd: 'CHANGE_MODE', mode: newMode });
 }
 
-startEl.addEventListener('click', async() => {
+startEl.addEventListener('click', async () => {
     const timeNow = new Date(Date.now());
 
     if (interval) {
-        chrome.runtime.sendMessage({cmd: 'STOP_TIMER', when: timeNow});
+        chrome.runtime.sendMessage({ cmd: 'STOP_TIMER', when: timeNow });
         stopTimer();
     }
     else {
-        chrome.runtime.sendMessage({cmd: 'START_TIMER', when: timeNow, mode: mode});
+        chrome.runtime.sendMessage({ cmd: 'START_TIMER', when: timeNow, mode: mode });
         startTimer();
     }
 })
 
-resetEl.addEventListener('click', async() => {
-    chrome.runtime.sendMessage({cmd: 'RESET_TIMER'});
+resetEl.addEventListener('click', async () => {
+    chrome.runtime.sendMessage({ cmd: 'RESET_TIMER' });
     resetTimer();
 })
 
-pomodoroEl.addEventListener('click', async() => {
+pomodoroEl.addEventListener('click', async () => {
     const mode = {
         time: 25,
         dark: "#d95550",
@@ -128,7 +128,7 @@ pomodoroEl.addEventListener('click', async() => {
     changeMode(mode)
 })
 
-shortBreakEl.addEventListener('click', async() => {
+shortBreakEl.addEventListener('click', async () => {
     const mode = {
         time: 5,
         dark: "#4c9195",
@@ -137,7 +137,7 @@ shortBreakEl.addEventListener('click', async() => {
     changeMode(mode)
 })
 
-longBreakEl.addEventListener('click', async() => {
+longBreakEl.addEventListener('click', async () => {
     const mode = {
         time: 15,
         dark: "#457ca3",

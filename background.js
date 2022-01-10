@@ -59,7 +59,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     } else if (request.cmd === 'GET_TIME') {
         updateTime();
 
-        sendResponse({time: time, run: isRunning, mode: mode})
+        sendResponse({ time: time, run: isRunning, mode: mode })
     } else if (request.cmd === 'CHANGE_MODE') {
         mode = request.mode;
         resetTimer();
@@ -67,4 +67,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 })
 
-setInterval(()=>{console.log("")}, 1000);
+setInterval(() => { console.log("") }, 1000);
