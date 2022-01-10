@@ -39,7 +39,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             resetTimer();
             chrome.notifications.create({
                 title: "Pomodoro",
-                iconUrl: "tomato.png",
+                iconUrl: "/images/tomato128.png",
                 message: "Timer is done",
                 type: "basic",
             });
