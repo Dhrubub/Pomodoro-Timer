@@ -29,10 +29,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if (timerTime) {
             passedTime = Date.now() - timerTime.getTime();
         }
-        console.log(passedTime)
         passedTime = Math.floor(passedTime / 1000);
-        console.log(typeof(passedTime))
+
+
         sendResponse({time: passedTime, run: isRunning})
-        console.log(passedTime);
     }
 })
+
+setInterval(()=>{}, 20000);
