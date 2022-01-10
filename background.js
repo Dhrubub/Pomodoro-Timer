@@ -1,21 +1,12 @@
 let startingTime = 25;
 let time = startingTime * 60;
-let interval = null;
-let isInitial = true;
+let prevTime = time;
+
 let isRunning = false;
 
-
-let timerID;
 let timerTime;
 
-let initialTime;
-
-function startTime() {
-    hasStarted = true;
-    isInitial = false;
-
-
-}
+let passedTime = 0;
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.cmd === 'START_TIMER') {
@@ -24,16 +15,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         // timerID = setTimeout(() => {
         //     // alert user;
         // }, timerTime.getTime() - Date.now());
+
+    } else if (request.cmd === 'STOP_TIMER') {
+        isRunning = false;
+        prevTime = time;
+
     } else if (request.cmd === 'GET_TIME') {
-        let passedTime = 0;
-        if (timerTime) {
+        if (timerTime && isRunning) {
             passedTime = Date.now() - timerTime.getTime();
         }
+
         passedTime = Math.floor(passedTime / 1000);
+        time = prevTime - passedTime;
 
-
-        sendResponse({time: passedTime, run: isRunning})
+        sendResponse({time: time, run: isRunning})
     }
 })
 
-setInterval(()=>{}, 20000);
+setInterval(()=>{console.log("")}, 1000);

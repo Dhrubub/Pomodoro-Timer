@@ -13,9 +13,9 @@ let isInitial = true;
 
 chrome.runtime.sendMessage({cmd: 'GET_TIME'}, (response) => {
     if (response.time) {
-        time = time - response.time;
+        time = response.time;
+        updateTimerDisplay();
         if (response.run) {
-            updateTimerDisplay();
             startTimer();
         }
         console.log(time);
@@ -64,6 +64,13 @@ function updateTimerDisplay() {
 
 startEl.addEventListener('click', async() => {
     const timeNow = new Date(Date.now());
-    chrome.runtime.sendMessage({cmd: 'START_TIMER', when: timeNow});
-    interval ? stopTimer() : startTimer();
+
+    if (interval) {
+        chrome.runtime.sendMessage({cmd: 'STOP_TIMER', when: timeNow});
+        stopTimer();
+    }
+    else {
+        chrome.runtime.sendMessage({cmd: 'START_TIMER', when: timeNow});
+        startTimer();
+    }
 })
