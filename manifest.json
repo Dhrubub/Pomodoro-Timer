@@ -1,6 +1,6 @@
 {
-    "name": "Pomodoro Chrome Extension",
-    "description": "Boost your productivity with the pomodoro helper",
+    "name": "Pomodoro Timer: A Simple Timer to Boost Your Productivity",
+    "description": "Use the pomodoro technique to boost your productivity. This is a simple timer that helps keep you on track as you work.",
     "version": "1.0",
     "manifest_version": 2,
     "background": {
