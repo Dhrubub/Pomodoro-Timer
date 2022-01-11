@@ -2,17 +2,16 @@
     "name": "Pomodoro Chrome Extension",
     "description": "Boost your productivity with the pomodoro helper",
     "version": "1.0",
-    "manifest_version": 3,
+    "manifest_version": 2,
     "background": {
-        "service_worker": "background.js"
+        "scripts": [
+            "background.js"
+        ]
     },
     "permissions": [
-        "storage",
-        "activeTab",
-        "scripting",
         "notifications"
     ],
-    "action": {
+    "browser_action": {
         "default_popup": "popup.html",
         "default_icon": {
             "16": "/images/tomato16.png",
@@ -22,14 +21,7 @@
         }
     },
     "web_accessible_resources": [
-        {
-            "resources": [
-                "/images/tomato128.png"
-            ],
-            "matches": [
-                "<all_urls>"
-            ]
-        }
+        "/images/tomato128.png"
     ],
     "icons": {
         "16": "/images/tomato16.png",
