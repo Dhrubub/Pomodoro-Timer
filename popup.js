@@ -1,37 +1,37 @@
-const countdownEl = document.getElementById('countdown');
-const startEl = document.getElementById('startButton');
-const resetEl = document.getElementById('resetButton');
-const pomodoroEl = document.getElementById('pomodoroButton');
-const shortBreakEl = document.getElementById('shortBreakButton');
-const longBreakEl = document.getElementById('longBreakButton');
+const countdownEl = document.getElementById("countdown");
+const startEl = document.getElementById("startButton");
+const resetEl = document.getElementById("resetButton");
+const pomodoroEl = document.getElementById("pomodoroButton");
+const shortBreakEl = document.getElementById("shortBreakButton");
+const longBreakEl = document.getElementById("longBreakButton");
 
 let mode = {
     time: 25,
     dark: "#d95550",
     light: "#dd6662",
-}
+};
 let time = mode.time * 60;
 let interval = null;
 let isInitial = true;
 
-
-chrome.runtime.sendMessage({ cmd: 'GET_TIME' }, (response) => {
+chrome.runtime.sendMessage({ cmd: "GET_TIME" }, (response) => {
     if (response.time) {
         time = response.time;
-        updateTimerDisplay();
+        mode = response.mode;
         changeColor(response.mode);
+        updateTimerDisplay();
         if (response.run) {
             startTimer();
         }
     }
-})
+});
 
 function setTime() {
     time = mode.time * 60;
 }
 
 function startTimer() {
-    startEl.innerHTML = 'Stop';
+    startEl.innerHTML = "Stop";
     if (isInitial) updateCountdown();
     interval = setInterval(updateCountdown, 1000);
 
@@ -39,7 +39,7 @@ function startTimer() {
 }
 
 function stopTimer() {
-    startEl.innerHTML = 'Start';
+    startEl.innerHTML = "Start";
     clearInterval(interval);
     interval = null;
 }
@@ -84,7 +84,7 @@ function changeColor(mode) {
 
     let buttons = [
         ...document.getElementsByTagName("button"),
-        ...document.getElementsByTagName("span")
+        ...document.getElementsByTagName("span"),
     ];
 
     for (let i = 0; i < buttons.length; i++) {
@@ -98,50 +98,53 @@ function changeMode(newMode) {
     resetTimer();
 
     changeColor(newMode);
-    chrome.runtime.sendMessage({ cmd: 'CHANGE_MODE', mode: newMode });
+    chrome.runtime.sendMessage({ cmd: "CHANGE_MODE", mode: newMode });
 }
 
-startEl.addEventListener('click', async () => {
+startEl.addEventListener("click", async () => {
     const timeNow = new Date(Date.now());
 
     if (interval) {
-        chrome.runtime.sendMessage({ cmd: 'STOP_TIMER', when: timeNow });
+        chrome.runtime.sendMessage({ cmd: "STOP_TIMER", when: timeNow });
         stopTimer();
-    }
-    else {
-        chrome.runtime.sendMessage({ cmd: 'START_TIMER', when: timeNow, mode: mode });
+    } else {
+        chrome.runtime.sendMessage({
+            cmd: "START_TIMER",
+            when: timeNow,
+            mode: mode,
+        });
         startTimer();
     }
-})
+});
 
-resetEl.addEventListener('click', async () => {
-    chrome.runtime.sendMessage({ cmd: 'RESET_TIMER' });
+resetEl.addEventListener("click", async () => {
+    chrome.runtime.sendMessage({ cmd: "RESET_TIMER" });
     resetTimer();
-})
+});
 
-pomodoroEl.addEventListener('click', async () => {
+pomodoroEl.addEventListener("click", async () => {
     const mode = {
         time: 25,
         dark: "#d95550",
         light: "#dd6662",
-    }
-    changeMode(mode)
-})
+    };
+    changeMode(mode);
+});
 
-shortBreakEl.addEventListener('click', async () => {
+shortBreakEl.addEventListener("click", async () => {
     const mode = {
         time: 5,
         dark: "#4c9195",
         light: "#5e9ca0",
-    }
-    changeMode(mode)
-})
+    };
+    changeMode(mode);
+});
 
-longBreakEl.addEventListener('click', async () => {
+longBreakEl.addEventListener("click", async () => {
     const mode = {
         time: 15,
         dark: "#457ca3",
         light: "#5889ac",
-    }
-    changeMode(mode)
-})
+    };
+    changeMode(mode);
+});
