@@ -2,7 +2,7 @@ let mode = {
     time: 25,
     dark: "#d95550",
     light: "#dd6662",
-}
+};
 
 let time = mode.time * 60;
 let prevTime = time;
@@ -30,7 +30,7 @@ function updateTime() {
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.cmd === 'START_TIMER') {
+    if (request.cmd === "START_TIMER") {
         mode = request.mode;
         timerTime = new Date(request.when);
         isRunning = true;
@@ -44,27 +44,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 type: "basic",
             });
         }, prevTime * 1000);
-
-    } else if (request.cmd === 'STOP_TIMER') {
+    } else if (request.cmd === "STOP_TIMER") {
         updateTime();
 
         isRunning = false;
         prevTime = time;
         clearTimeout(timerFinish);
-
-    } else if (request.cmd === 'RESET_TIMER') {
+    } else if (request.cmd === "RESET_TIMER") {
         resetTimer();
         clearTimeout(timerFinish);
-
-    } else if (request.cmd === 'GET_TIME') {
+    } else if (request.cmd === "GET_TIME") {
         updateTime();
 
-        sendResponse({ time: time, run: isRunning, mode: mode })
-    } else if (request.cmd === 'CHANGE_MODE') {
+        sendResponse({ time: time, run: isRunning, mode: mode });
+    } else if (request.cmd === "CHANGE_MODE") {
         mode = request.mode;
         resetTimer();
     }
-
-})
-
-setInterval(() => { console.log("") }, 1000);
+});
